@@ -1,0 +1,17 @@
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2.csprojAssemblyReference.cache
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\MainWindow.g.cs
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\App.g.cs
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2_MarkupCompile.cache
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2_MarkupCompile.lref
+H:\Paterns Старостин\Lab2_2\Lab2_2\bin\Debug\Lab2_2.exe.config
+H:\Paterns Старостин\Lab2_2\Lab2_2\bin\Debug\Lab2_2.exe
+H:\Paterns Старостин\Lab2_2\Lab2_2\bin\Debug\Lab2_2.pdb
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\MainWindow.baml
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2.g.resources
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2.Properties.Resources.resources
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2.csproj.GenerateResource.cache
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2.csproj.CoreCompileInputs.cache
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2.exe
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\Lab2_2.pdb
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\DrawMatrix.g.cs
+H:\Paterns Старостин\Lab2_2\Lab2_2\obj\Debug\DrawMatrix.baml

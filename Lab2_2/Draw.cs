@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Lab2_2
 {
@@ -43,14 +44,32 @@ namespace Lab2_2
     {
         public void Draw(int?[,] items, int numRows, int numCols, bool border)
         {
-            DrawMatrix window = new DrawMatrix();
-            window.Owner = Application.Current.MainWindow;
+            Window window = new Window
+            {
+                Owner = Application.Current.MainWindow,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                MaxHeight = 1000,
+                MaxWidth = 1000
+            };
 
+            ScrollViewer scroll = new ScrollViewer()
+            {
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Visible
+            };
             Grid value = new Grid();
             for (int row = 0; row < numRows; row++)
-                value.RowDefinitions.Add(new RowDefinition());
+            {
+                RowDefinition newRow = new RowDefinition();
+                newRow.Height = GridLength.Auto;
+                value.RowDefinitions.Add(newRow);
+            }
+
             for (int col = 0; col < numCols; col++)
-                value.ColumnDefinitions.Add(new ColumnDefinition());
+            {
+                ColumnDefinition newCol = new ColumnDefinition();
+                newCol.Width = GridLength.Auto;
+                value.ColumnDefinitions.Add(newCol);
+            }
 
             for (int row = 0; row < numRows; row++)
                 for (int col = 0; col < numCols; col++)
@@ -63,15 +82,63 @@ namespace Lab2_2
                     Grid.SetRow(txt, row);
                     value.Children.Add(txt);
                 }
+
             if (border)
             {
+                Grid bord = CreateBorder(Brushes.Black, 5);
                 Grid.SetRow(value, 0);
                 Grid.SetColumn(value, 0);
-                window.DefaultPlace.Children.Add(value);
+                bord.Children.Add(value);
+                scroll.Content = bord;
+                window.Content = scroll;
             }
-            else window.Content = value;
+            else
+            {
+                scroll.Content = value;
+                window.Content = scroll;
+            }
             
             window.Show();
+        }
+
+        static Grid CreateBorder(Brush color, Double size)
+        {
+            Grid bord = new Grid();
+            GridSplitter splitLeft = new GridSplitter
+            {
+                Background = color,
+                Width = size,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Stretch
+            };
+            GridSplitter splitRight = new GridSplitter
+            {
+                Background = color,
+                Width = size,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Stretch
+            };
+            GridSplitter splitTop = new GridSplitter
+            {
+                Background = color,
+                Height = size,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Top
+            };
+            GridSplitter splitBot = new GridSplitter
+            {
+                Background = color,
+                Height = size,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
+            
+            bord.Children.Add(splitLeft);
+            bord.Children.Add(splitRight);
+            bord.Children.Add(splitTop);
+            bord.Children.Add(splitBot);
+            
+            return bord;
         }
     }
 }

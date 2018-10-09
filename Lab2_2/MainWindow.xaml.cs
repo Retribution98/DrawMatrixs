@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace Lab2_2
 {
@@ -47,6 +48,7 @@ namespace Lab2_2
         {
             matrix = new DefaultMatrix(10, 10);
             MatrixInitiator.FillMatrix(matrix, 25, 100);
+            ThreadStart thStatr = new ThreadStart(DrawMatrix);
             this.DrawMatrix();
         }
 

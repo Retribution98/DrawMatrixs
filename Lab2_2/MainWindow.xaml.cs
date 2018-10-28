@@ -56,7 +56,7 @@ namespace Lab2_2
             {
                 dr.Clear();
             }
-            matrix = new DefaultMatrix(20, 20);
+            matrix = new DefaultMatrix(40, 40);
 
             MatrixInitiator.FillMatrix(matrix, 200, 100);
             ThreadStart thStatr = new ThreadStart(DrawMatrix);
@@ -69,7 +69,7 @@ namespace Lab2_2
             {
                 dr.Clear();
             }
-            matrix = new SparseMatrix(20, 20);
+            matrix = new SparseMatrix(40, 40);
             MatrixInitiator.FillMatrix(matrix, 200, 100);
             this.DrawMatrix();
         }

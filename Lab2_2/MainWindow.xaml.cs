@@ -24,8 +24,8 @@ namespace Lab2_2
         static IMatrix matrix;
         static IDrawer[] drawers =
         {
-            new DrawerToConsole(),
-            new DrawerToWindow()
+            new DrawerToWindow(),
+            new DrawerToConsole()
         };
 
         public MainWindow()
@@ -56,9 +56,21 @@ namespace Lab2_2
             {
                 dr.Clear();
             }
-            matrix = new DefaultMatrix(40, 40);
 
-            MatrixInitiator.FillMatrix(matrix, 200, 100);
+            Random r = new Random();
+            IMatrix matrix1 = new DefaultMatrix(r.Next(1, 10), r.Next(1, 10));
+
+            MatrixInitiator.FillMatrix(matrix1, matrix1.NumColumns * matrix1.NumRows, 100);
+
+            if (matrix != null)
+            {
+                if ((bool)Horizontal.IsChecked)
+                    matrix = new HorizontalCompositeMatrix(new List<IMatrix>() { matrix1, matrix });
+                else if ((bool)Vertical.IsChecked)
+                    matrix = new VerticalCompositeMatrix(new List<IMatrix>() { matrix1, matrix });
+            }
+            else matrix = matrix1;
+
             ThreadStart thStatr = new ThreadStart(DrawMatrix);
             this.DrawMatrix();
         }
@@ -69,8 +81,20 @@ namespace Lab2_2
             {
                 dr.Clear();
             }
-            matrix = new SparseMatrix(40, 40);
-            MatrixInitiator.FillMatrix(matrix, 200, 100);
+
+            Random r = new Random();
+            IMatrix matrix1 = new SparseMatrix(r.Next(1, 10), r.Next(1, 10));
+            MatrixInitiator.FillMatrix(matrix1, matrix1.NumColumns * matrix1.NumRows, 100);
+
+            if (matrix != null)
+            {
+                if ((bool)Horizontal.IsChecked)
+                    matrix = new HorizontalCompositeMatrix(new List<IMatrix>() { matrix1, matrix });
+                else if ((bool)Vertical.IsChecked)
+                    matrix = new VerticalCompositeMatrix(new List<IMatrix>() { matrix1, matrix });
+            }
+            else matrix = matrix1;
+            ThreadStart thStatr = new ThreadStart(DrawMatrix);
             this.DrawMatrix();
         }
 
@@ -104,5 +128,23 @@ namespace Lab2_2
                 }
             }
         }
+
+        private void RenumeratingMatrix(object sender, RoutedEventArgs e)
+        {
+            if (matrix == null) return;
+            Random random = new Random();
+            ChangeNumeratorMatrix decorMatix = new ChangeNumeratorMatrix(matrix);
+            decorMatix.ChangeRow(random.Next(matrix.NumRows), random.Next(matrix.NumRows));
+            matrix = decorMatix;
+            DrawMatrix();
+        }
+
+        private void DenumeratingMatrix(object sender, RoutedEventArgs e)
+        {
+            if (matrix == null) return;
+            matrix = matrix.getComponent();
+            DrawMatrix();
+        }
+
     }
 }

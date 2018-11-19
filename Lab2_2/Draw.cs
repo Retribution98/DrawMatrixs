@@ -10,27 +10,26 @@ using System.Threading;
 
 namespace Lab2_2
 {
-    interface IDrawable
+    public interface IDrawable
     {
         void DrawItems(IDrawer drawer);
         void DrawBorder(IDrawer drawer);
     }
-    interface IDrawer
+    public interface IDrawer
     {
         void Clear();
         void DrawBorder(IMatrix matrix);
-        void DrawCell(IMatrix matrix, int row, int col);
+        void DrawCell(int value, int row, int col);
     }
 
     class DrawerToConsole:IDrawer
     {
-        void SetBuffer(IMatrix matrix)
+        void CheckBuffer(int row, int col)
         {
-            if (Console.BufferWidth < 8 * matrix.NumColumns + 4) 
-                Console.BufferWidth = 8 * matrix.NumColumns + 4;
-            if (Console.BufferHeight < matrix.NumRows + 4)
-                Console.BufferHeight = matrix.NumRows + 4;
-
+            if (Console.BufferWidth < 8 * col + 4)
+                Console.BufferWidth = 8 * col + 4;
+            if (Console.BufferHeight < row + 4)
+                Console.BufferHeight = row + 4;
         }
 
         public void Clear()
@@ -39,7 +38,7 @@ namespace Lab2_2
         }
         public void DrawBorder(IMatrix matrix)
         {
-            SetBuffer(matrix);
+            CheckBuffer(matrix.NumRows, matrix.NumColumns);
             Console.WriteLine(new string('-', 8 * (matrix.NumColumns) + 2));
             for (int i = 0; i < matrix.NumRows; i++)
             {
@@ -49,11 +48,11 @@ namespace Lab2_2
             }
             Console.WriteLine(new string ('-', 8 * (matrix.NumColumns) +2));
         }
-        public void DrawCell(IMatrix matrix, int row, int col)
+        public void DrawCell(int value, int row, int col)
         {
-            SetBuffer(matrix);
+            CheckBuffer(row, col);
             Console.SetCursorPosition(col*8+1, row+1);
-            Console.Write(matrix.GetValue(row, col));
+            Console.Write(value);
         }
     }
     class DrawerToWindow : IDrawer
@@ -67,26 +66,26 @@ namespace Lab2_2
             {
                 Owner = Application.Current.MainWindow,
                 SizeToContent = SizeToContent.WidthAndHeight,
-                MaxHeight = System.Windows.SystemParameters.PrimaryScreenHeight*0.9,
-                MaxWidth = System.Windows.SystemParameters.PrimaryScreenHeight*0.9,
+                MaxHeight = System.Windows.SystemParameters.PrimaryScreenHeight * 0.9,
+                MaxWidth = System.Windows.SystemParameters.PrimaryScreenHeight * 0.9,
+                Topmost = false
             };
         }
-        void CreateNewGrid(int numRows, int numCols)
+        void CheckGrid(int numRows, int numCols)
         {
-            items = new Grid();
-            for (int row = 0; row < numRows; row++)
+            if (items==null) items = new Grid();
+            for (int row = items.RowDefinitions.Count; row <= numRows; row++)
             {
                 RowDefinition newRow = new RowDefinition();
                 newRow.Height = GridLength.Auto;
                 items.RowDefinitions.Add(newRow);
             }
-            for (int col = 0; col < numCols; col++)
+            for (int col = items.ColumnDefinitions.Count; col <= numCols; col++)
             {
                 ColumnDefinition newCol = new ColumnDefinition();
                 newCol.Width = GridLength.Auto;
                 items.ColumnDefinitions.Add(newCol);
             }
-            Show();
         }
         void CreateBorder(Brush color, Double size)
         {
@@ -156,21 +155,18 @@ namespace Lab2_2
         }
         public void DrawBorder(IMatrix matrix)
         {
-            if (items== null)
-                CreateNewGrid(matrix.NumRows, matrix.NumColumns);
-
+            CheckGrid(matrix.NumRows, matrix.NumColumns);
             CreateBorder(Brushes.Black, 5);
             Show();
         }
-        public void DrawCell(IMatrix matrix, int row, int col)
+        public void DrawCell(int value, int row, int col)
         {
-            if (items == null)
-                CreateNewGrid(matrix.NumRows, matrix.NumColumns);
+            CheckGrid(row, col);
 
             TextBlock txt = new TextBlock
             {
                 Padding = new Thickness(5),
-                Text = matrix.GetValue(row, col).ToString(),
+                Text = value.ToString(),
                 ToolTip = new StringBuilder("Row: "+row+" Col: "+col)
             };
             Grid.SetColumn(txt, col);

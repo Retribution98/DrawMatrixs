@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 namespace Lab2_2
 {
-    interface IMatrix:IDrawable
+    public delegate void DrawItemsDelegate(int value, int rowStartPosition, int colStartPosition);
+
+    public interface IMatrix:IDrawable
     {
         int NumColumns { get; }
         int NumRows { get; }
 
         int GetValue(int index1, int index2);
         void SetValue(int value, int row, int col);
+        IMatrix getComponent();
+        void Iterate(DrawItemsDelegate drawItems);
     }
 
     abstract class SomeMatrix : IMatrix
@@ -44,16 +48,26 @@ namespace Lab2_2
                 throw new ArgumentException("Wrong index");
             matrix[row].SetValue(value, col);
         }
-
         public virtual void DrawBorder(IDrawer drawer)
         {
             drawer.DrawBorder(this);
         }
         public virtual void DrawItems(IDrawer drawer)
         {
+            Iterate((value, row, col) =>
+            {
+                drawer.DrawCell(value, row, col);
+            });
+        }
+        public IMatrix getComponent()
+        {
+            return this;
+        }
+        public virtual void Iterate(DrawItemsDelegate drawItems)
+        {
             for (int row = 0; row < NumRows; row++)
                 for (int col = 0; col < NumColumns; col++)
-                    drawer.DrawCell(this, row, col);
+                    drawItems.Invoke(GetValue(row, col), row, col);
         }
     }
 
@@ -77,26 +91,12 @@ namespace Lab2_2
         {
             return new SparseVector(size);
         }
-        public override void DrawItems(IDrawer drawer)
+        public override void Iterate(DrawItemsDelegate drawItems)
         {
             for (int row = 0; row < NumRows; row++)
                 for (int col = 0; col < NumColumns; col++)
-                    if (this.GetValue(row, col) != 0)
-                        drawer.DrawCell(this, row, col);
-        }
-    }
-
-    class TransMatrix: DefaultMatrix
-    {
-        public TransMatrix(int numCol, int numRows):base(numCol,numRows)
-        {
-
-        }
-        public override int GetValue(int row, int col)
-        {
-            if ((col > NumRows) || (row > NumColumns) || (col < 0) || (row < 0))
-                throw new ArgumentException("Wrong index");
-            return base.GetValue(col, row);
+                    if (GetValue(row, col) != 0)
+                        drawItems.Invoke(GetValue(row, col), row, col);
         }
     }
 
